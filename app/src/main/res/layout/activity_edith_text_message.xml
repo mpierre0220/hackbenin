@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.EdithTextMessage"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/add_text_layout_top_edith"
+        android:layout_width="match_parent"
+        android:layout_height="148dp"
+        android:background="@color/blue_text"
+        android:orientation="vertical">
+        <!-- android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" -->
+
+        <EditText
+            android:id="@+id/text_message_edith"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:autofillHints=""
+            android:gravity="top|left"
+            android:hint="@string/text_message"
+            android:inputType="textCapWords|textMultiLine"
+            android:lines="3"
+            android:minLines="3"
+            android:scrollHorizontally="false"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/primary_text_disabled_material_dark"
+            android:textSize="25sp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/add_text_layout_top_edith"
+        android:layout_marginRight="5sp"
+        android:layout_marginTop="5sp"
+        android:background="@color/blue_key">
+
+        <ImageButton
+            android:id="@+id/btn_save_edith"
+            android:layout_width="100sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="2sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginEnd="2sp"
+            android:layout_marginBottom="2sp"
+            android:background="@drawable/button_white_pressed_click"
+            android:onClick="onClickBtnEdith"
+            android:src="@drawable/ic_edit_blue_24"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </RelativeLayout>
+
+</RelativeLayout>
