@@ -81,7 +81,7 @@ public class KliyanHTTP {
         });
     }
 
-    public void KliyanHTTPPosterMessage(String chaineRequete, String URLDeBase, String identifiant, String passe, int idMsg, String) {
+    public void KliyanHTTPPosterMessage(String chaineRequete, String URLDeBase, String identifiant, String passe, int idMsg) {
         RequestParams params = new RequestParams();
         String URL;
         //verifier qu'on est connecté au réseau
