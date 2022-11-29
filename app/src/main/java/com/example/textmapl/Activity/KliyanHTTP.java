@@ -34,7 +34,6 @@ public class KliyanHTTP {
 
     Context context;
 
-    //public static String BASE_URL               = "https://bancoregalohaiti.com";
     public static String BASE_URL             = "http://bancoregtest.com";
     String jsonResponse;
 
@@ -45,6 +44,8 @@ public class KliyanHTTP {
         syncHttpClient.setTimeout(10000);
         requestParams = new RequestParams();
         this.context = context;
+        //listener est la classe qui a instantié le client et qui recevra les messages de
+        //notifications
         this.listener = listener;
         if (baseUrl != null) {
             this.BASE_URL = baseUrl;
@@ -76,6 +77,67 @@ public class KliyanHTTP {
                     listener.apelRESTKliyanHTTPEchwe(statusCode, null);
                 } catch (Exception e) {
                 }
+            }
+        });
+    }
+
+    public void KliyanHTTPPosterMessage(String chaineRequete, String URLDeBase, String identifiant, String passe, int idMsg, String) {
+        RequestParams params = new RequestParams();
+        String URL;
+        //verifier qu'on est connecté au réseau
+        if (!EstatiKoneksyon.isConnected(context)) {
+            //sinon la communication n'est pas possible
+            listener.apelRESTKliyanHTTPEchwe(-1, null);
+        }
+        //
+        if (URLDeBase != null) {
+            URL = String.format("%s%s", URLDeBase, chaineRequete);
+        } else {
+            URL = String.format("%s%s", GlobalVar.servers[GlobalVar.SERVER], chaineRequete);
+        }
+
+        //GsonBuilder builder = new GsonBuilder();
+        //Gson gson = builder.create();
+        try {
+            /*
+            http://bancoregtest.com/textmsg/ajoutertexte
+            Data: {"identifiant":"Rodney", "passe":"moderable2020", "texte":"Un petit message tout tranquille","id":1}
+             */
+            params.put("identifiant", identifiant);
+            params.put("passe", passe);
+            if (idMsg>0) {
+                params.put("id", idMsg);
+            }
+            if (chaineRequete != null){
+                params.put("texte", chaineRequete);
+            }
+        } catch (Exception e) {
+            return;
+        }
+        //lancer une requête post asynchrone
+        asyncHttpClient.post(URL, params, new JsonHttpResponseHandler() {
+            @Override
+            //Si la requête réussit, onSuccess sera invoqué
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                jsonResponse = response.toString();
+                //listener dans ce cas est la classe Communication qui a implémenté l'interface
+                //OnKliyanHTTPFini
+                listener.apelRESTKliyanHTTPFini(response);
+                //Log.i(TAG, "onSuccess: " + jsonResponse);
+            }
+
+            @Override
+            //Si la requête échoue, onFailure sera invoqué
+            public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable throwable) {
+                super.onFailure(statusCode, headers, errorResponse, throwable);
+                try {
+                    //listener dans ce cas est la classe Communication qui a implémenté l'interface
+                    //OnKliyanHTTPFini
+                    listener.apelRESTKliyanHTTPEchwe(statusCode, null);
+                } catch (Exception e) {
+                }
+                //Log.e(TAG, "onFailure: " + errorResponse);
             }
         });
     }

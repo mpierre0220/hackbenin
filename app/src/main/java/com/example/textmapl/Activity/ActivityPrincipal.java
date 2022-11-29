@@ -221,9 +221,6 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
         boutonYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // envoie du message
-                //LotteryNumber.arrayListGame.clear();
-                //GlobalLotri.addBoulLis = false;
                 alertDialog.dismiss();
                 finish();
                 startActivity(getIntent());
