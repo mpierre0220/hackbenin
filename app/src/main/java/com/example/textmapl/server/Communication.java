@@ -22,6 +22,11 @@ public class Communication  implements OnKliyanHTTPFini {
 
     public void posterMessage(String identifiant, String passe, String texte, int idMsg){
         GlobalVar.requeteType = GlobalVar.REQUETE_AJOUTER_MSG;
-        client.KliyanHTTPPosterMessage(texte,null,identifiant, passe,idMsg);
+        client.KliyanHTTPPosterMessage(texte,null,identifiant, passe,idMsg, null);
+    }
+
+    public void changerMotDePasse(String identifiant, String passe, String nouveauPasse){
+        GlobalVar.requeteType = GlobalVar.REQUETE_CHANGER_MOT_DE_PASSE;
+        client.KliyanHTTPPosterMessage(null,null,identifiant, passe,-1, nouveauPasse);
     }
 }
