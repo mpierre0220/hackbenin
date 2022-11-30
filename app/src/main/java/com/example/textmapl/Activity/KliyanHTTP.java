@@ -81,7 +81,12 @@ public class KliyanHTTP {
         });
     }
 
-    public void KliyanHTTPPosterMessage(String chaineRequete, String URLDeBase, String identifiant, String passe, int idMsg) {
+    public void KliyanHTTPPosterMessage(String chaineRequete,
+                                        String URLDeBase,
+                                        String identifiant,
+                                        String passe,
+                                        int idMsg,
+                                        String nouveauPasse) {
         RequestParams params = new RequestParams();
         String URL;
         //verifier qu'on est connecté au réseau
@@ -105,11 +110,15 @@ public class KliyanHTTP {
              */
             params.put("identifiant", identifiant);
             params.put("passe", passe);
+            //Les paramètres facultatives
             if (idMsg>0) {
                 params.put("id", idMsg);
             }
             if (chaineRequete != null){
                 params.put("texte", chaineRequete);
+            }
+            if (nouveauPasse != null){
+                params.put("nouveaupasse", nouveauPasse);
             }
         } catch (Exception e) {
             return;
