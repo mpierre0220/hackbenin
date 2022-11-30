@@ -30,6 +30,7 @@ import com.example.textmapl.Interface.MyButtonClickListener;
 import com.example.textmapl.Interface.RecyclerViewClickInterface;
 import com.example.textmapl.R;
 import com.example.textmapl.modal.MessageText;
+import com.example.textmapl.server.Communication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +40,14 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<MessageText> arrayListMessage;
     TextView teksTit, teksMesaj, boutonNo, boutonYes;
+    Communication communication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         setTitle("Texte Message");
+        communication = new Communication(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.id_recyclerTxt);
         arrayListMessage = FileText.teksEnfoList(this);
@@ -221,9 +224,11 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
         boutonYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.dismiss();
+                /*alertDialog.dismiss();
                 finish();
-                startActivity(getIntent());
+                startActivity(getIntent());*/
+                //communication.demanderIdsMessage("MAPL", "setimodewi");
+                communication.demanderMessage("MAPL", "setimodewi", 6);
             }
         });
 

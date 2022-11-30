@@ -16,6 +16,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class KliyanHTTP {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 String jsonResponse = response.toString();
-                listener.apelRESTKliyanHTTPFini(response);
+                listener.apelRESTKliyanHTTPFini(jsonResponse);
                 //Log.i(TAG, "onSuccess: " + jsonResponse);
             }
 
@@ -127,12 +128,23 @@ public class KliyanHTTP {
         asyncHttpClient.post(URL, params, new JsonHttpResponseHandler() {
             @Override
             //Si la requête réussit, onSuccess sera invoqué
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+                jsonResponse = response.toString();
+                //listener dans ce cas est la classe Communication qui a implémenté l'interface
+                //OnKliyanHTTPFini
+                listener.apelRESTKliyanHTTPFini(jsonResponse);
+                //Log.i(TAG, "onSuccess: " + jsonResponse);
+            }
+
+            @Override
+            //Si la requête réussit, onSuccess sera invoqué
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 jsonResponse = response.toString();
                 //listener dans ce cas est la classe Communication qui a implémenté l'interface
                 //OnKliyanHTTPFini
-                listener.apelRESTKliyanHTTPFini(response);
+                listener.apelRESTKliyanHTTPFini(jsonResponse);
                 //Log.i(TAG, "onSuccess: " + jsonResponse);
             }
 
@@ -167,7 +179,7 @@ public class KliyanHTTP {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 jsonResponse = response.toString();
-                listener.apelRESTKliyanHTTPFini(response);
+                listener.apelRESTKliyanHTTPFini(jsonResponse);
                 //Log.i(TAG, "onSuccess: " + jsonResponse);
             }
            @Override
