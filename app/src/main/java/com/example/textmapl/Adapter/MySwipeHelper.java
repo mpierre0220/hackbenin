@@ -28,7 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-
+/*
+    Classe pour la gestion de mouvements de gauche à droite sur l'écran
+ */
 public abstract class MySwipeHelper extends ItemTouchHelper.SimpleCallback {
     int buttonWidth;
     private RecyclerView recyclerView;

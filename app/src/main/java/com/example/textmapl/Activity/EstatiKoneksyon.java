@@ -6,7 +6,9 @@ import android.net.NetworkInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.util.Log;
-
+/*
+    Classe permettant de vérifier la statut du connection avec le serveur
+ */
 public class EstatiKoneksyon extends PhoneStateListener {
     private int mSignalStrength;
 

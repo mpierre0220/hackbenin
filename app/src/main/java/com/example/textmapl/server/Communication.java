@@ -1,6 +1,11 @@
 package com.example.textmapl.server;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.CountDownTimer;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.textmapl.Activity.GlobalVar;
 import com.example.textmapl.Activity.KliyanHTTP;
@@ -10,11 +15,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.List;
-
+/*
+    Classe pour la communiation avec le serveur comprenant des requêtes API
+ */
 public class Communication  implements OnKliyanHTTPFini {
 
     KliyanHTTP client;
@@ -31,9 +35,13 @@ public class Communication  implements OnKliyanHTTPFini {
                 List<Integer> l = gson.fromJson(json, new TypeToken<List<ListeMessageId>>(){}.getType());
                 GlobalVar.listMessages = l;
                 break;
-            case GlobalVar.REQUETE_DEMANDER_MESSAGE:
+            case GlobalVar.REQUETE_LIRE_MESSAGE:
                 TextMessage t = gson.fromJson(json, TextMessage.class);
                 GlobalVar.textMessage = t;
+                break;
+            case GlobalVar.REQUETE_SUPPRIMER_MESSAGE:
+                DeleteStatus s = gson.fromJson(json, DeleteStatus.class);
+                GlobalVar.deleteStatus = s;
                 break;
         }
 
@@ -46,21 +54,37 @@ public class Communication  implements OnKliyanHTTPFini {
         GlobalVar.httpSucces   = false;
     };
 
-    public void posterMessage(String identifiant, String passe, String texte, int idMsg){
+    public void ajouterMessage(String identifiant, String passe, String texte, int idMsg){
         GlobalVar.requeteType = GlobalVar.REQUETE_AJOUTER_MSG;
-        client.KliyanHTTPPosterMessage(texte,null,identifiant, passe,idMsg, null);
+        client.KliyanHTTPPosterMessage("/textmsg/ajoutertexte",null,identifiant, passe, texte,idMsg, null);
     }
 
     public void changerMotDePasse(String identifiant, String passe, String nouveauPasse){
         GlobalVar.requeteType = GlobalVar.REQUETE_CHANGER_MOT_DE_PASSE;
-        client.KliyanHTTPPosterMessage(null,null,identifiant, passe,-1, nouveauPasse);
+        client.KliyanHTTPPosterMessage("/textmsg/nouveaumotdepasse",null,identifiant, passe, null,-1, nouveauPasse);
     }
-    public void demanderMessage(String identifiant, String passe, int idMsg){
-        GlobalVar.requeteType = GlobalVar.REQUETE_DEMANDER_MESSAGE;
-        client.KliyanHTTPPosterMessage("/textmsg/liretexte",null,identifiant, passe,idMsg, null);
+    public void lireMessage(String identifiant, String passe, int idMsg){
+        GlobalVar.requeteType = GlobalVar.REQUETE_LIRE_MESSAGE;
+        client.KliyanHTTPPosterMessage("/textmsg/liretexte",null,identifiant, passe, null,idMsg, null);
     }
-    public void demanderIdsMessage(String identifiant, String passe){
+    public void listerIdsMessage(String identifiant, String passe){
         GlobalVar.requeteType = GlobalVar.REQUETE_LISTER_ID_MESSAGES;
-        client.KliyanHTTPPosterMessage("/textmsg/listeridtextes",null,identifiant, passe,-1, null);
+        client.KliyanHTTPPosterMessage("/textmsg/listeridtextes",null,identifiant, passe, null,-1, null);
+
+    }
+
+    public void modifierMessage(String identifiant, String passe, String texte, int idMsg){
+        GlobalVar.requeteType = GlobalVar.REQUETE_MODIFIER_MESSAGE;
+        client.KliyanHTTPPosterMessage("/textmsg/modifiertexte",null,identifiant, passe, texte,idMsg, null);
+    }
+
+    public void supprimerMessage(String identifiant, String passe, int idMsg){
+        GlobalVar.requeteType = GlobalVar.REQUETE_SUPPRIMER_MESSAGE;
+        client.KliyanHTTPPosterMessage("/textmsg/supprimertexte",null,identifiant, passe, null,idMsg, null);
+    }
+
+    public void listerToutMessage(String identifiant, String passe){
+        GlobalVar.requeteType = GlobalVar.REQUETE_LISTER_TOUT_MESSAGE;
+        client.KliyanHTTPPosterMessage("/textmsg/listertextes",null,identifiant, passe, null,-1, null);
     }
 }

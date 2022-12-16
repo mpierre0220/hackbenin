@@ -13,7 +13,9 @@ import android.widget.EditText;
 
 import com.example.textmapl.File.FileText;
 import com.example.textmapl.R;
-
+/*
+    Classe d'activité permettant de faire des ajouts de textes messages
+ */
 public class AddTextMessage extends AppCompatActivity {
     EditText textMessage;
 
@@ -32,6 +34,7 @@ public class AddTextMessage extends AppCompatActivity {
             textMessage.setError("Champs vide!");
         }else {
             boolean res = FileText.saveText(this, textMessage.getText().toString());
+
             if (res){
                 new AlertDialog.Builder(view.getContext())
                         .setTitle("Succès")
