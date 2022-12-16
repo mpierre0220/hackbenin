@@ -8,4 +8,16 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.widget.SearchView"
         />
+
+    <item android:id="@+id/id_messages_server"
+        android:title="classe"
+        android:icon="@drawable/ic_logo_serve_message"
+        app:showAsAction="always|collapseActionView"
+        />
+
+    <item android:id="@+id/id_update_user"
+        android:title="classe"
+        android:icon="@drawable/ic_logo_user"
+        app:showAsAction="always|collapseActionView"
+        />
 </menu>

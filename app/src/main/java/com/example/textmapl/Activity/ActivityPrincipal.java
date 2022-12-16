@@ -35,6 +35,10 @@ import com.example.textmapl.server.Communication;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    (Classe d'activité) Classe principale du projet permettant l'affichage de tout les messages texte dans les fichier interne
+    et d'autres activités comme le menu ainsi que le bouton d'ajout de texte
+ */
 public class ActivityPrincipal extends AppCompatActivity implements SearchView.OnQueryTextListener, RecyclerViewClickInterface {
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
@@ -47,19 +51,26 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         setTitle("Texte Message");
+        //--------------------------------------------------
+        boolean reponse = FileText.verifyIfExisteFileUser(this);
+        if (!reponse){
+            GlobalVar.firstConnexion = true;
+            Intent it = new Intent(this, Login.class);
+            startActivity(it);
+            finish();
+        }else {
+            FileText.GetUserConnected(this);
+        }
+        //--------------------------------------------------
+
+        setResult(RESULT_OK);
+        GlobalVar.ActivityPrincipalThis = this;
         communication = new Communication(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.id_recyclerTxt);
         arrayListMessage = FileText.teksEnfoList(this);
-        //----------------------------------------------------------------
-        for (MessageText m : arrayListMessage){
-            Log.e("info " + arrayListMessage.indexOf(m)+1, " " + m.getTeks());
-            //Toast.makeText(getApplicationContext(),"tèks " + (arrayListMessage.indexOf(m)+1) + " : " + m.getTeks(), Toast.LENGTH_LONG).show();
-        }
-        //----------------------------------------------------------------
-
-
         //===================================== Swipe recyclerView ====================================
+        //Appl de la classe MySwipeHelper pour la gestion de gestures de gauche à droite sur l'écran
         MySwipeHelper swipeHelper = new MySwipeHelper(this, recyclerView, 200) {
             @Override
             public void instantiateMyButton(RecyclerView.ViewHolder viewHolder, List<MyButton> buffer) {
@@ -132,7 +143,7 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
         }
     }
 
-    // Metòd pou modifye yon tèks
+    // Methodes pour la modification des textes
     public void updateText(int id, String teksMesaj){
         Intent intent = new Intent(this, EdithTextMessage.class);
         intent.putExtra("id", id);
@@ -181,7 +192,8 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
 
     @Override
     public void onItemClick(int position) {
-        openLayout_mesaj_dyalog();
+        String texte = arrayListMessage.get(position).getTeks();
+        openLayout_mesaj_dyalog(texte);
     }
 
     @Override
@@ -196,10 +208,41 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case android.R.id.home: // idantifyan ti flèch la ki nan meni an
+
+                return true;
+            case R.id.id_messages_server:
+                GlobalVar.firstConnexion = false;
+                // Fonction ci-dessous permettant de lister tout les messages venant du serveur
+                // dans cet arrayList : GlobalVar.arrayListMessageSever
+                communication.listerToutMessage(GlobalVar.userConnected,GlobalVar.passwordConnected);
+
+                new CountDownTimer(2500, 1000) { // Ici, un compter de 2 secondes et demie avant le lancement de cette classe : ActivityAllMessageServer.class
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Intent it = new Intent(getApplicationContext(), ActivityAllMessageServer.class);
+                        startActivity(it);
+                    }
+                }.start();
+                return true;
+            case R.id.id_update_user:
+                GlobalVar.firstConnexion = false;
+                intent = new Intent(this, Login.class);
+                startActivityForResult(intent, 1);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    public void openLayout_mesaj_dyalog() {
+    public void openLayout_mesaj_dyalog(String texteMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this, androidx.appcompat.R.style.Theme_AppCompat_Dialog_Alert);
         View view = LayoutInflater.from(ActivityPrincipal.this).inflate(
                 R.layout.layout_mesaj_dialog,
@@ -224,11 +267,9 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
         boutonYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*alertDialog.dismiss();
-                finish();
-                startActivity(getIntent());*/
-                //communication.demanderIdsMessage("MAPL", "setimodewi");
-                communication.demanderMessage("MAPL", "setimodewi", 6);
+                int posNewText = arrayListMessage.size();
+                communication.ajouterMessage(GlobalVar.userConnected, GlobalVar.passwordConnected, texteMessage, posNewText);
+                alertDialog.dismiss();
             }
         });
 
@@ -236,5 +277,12 @@ public class ActivityPrincipal extends AppCompatActivity implements SearchView.O
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
         alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        startActivity(getIntent());
     }
 }

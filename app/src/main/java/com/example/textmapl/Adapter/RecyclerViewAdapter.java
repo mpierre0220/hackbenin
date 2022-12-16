@@ -18,7 +18,9 @@ import java.util.ArrayList;
 /**
  * Created by MAPL COMMUNICATION on 12/13/2020.
  */
-
+/*
+    Classe permettant d'adapter les textes contenant dans les fichiers internes dans un recyclerView
+ */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
     Context context;
     ArrayList<MessageText> arrayList;

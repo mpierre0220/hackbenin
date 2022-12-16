@@ -11,6 +11,10 @@ import com.example.textmapl.R;
 /**
  * Created by MAPL COMMUNICATION on 11/06/2022.
  */
+/*
+    Classe permettant d'avoir l'accès directement avec les design representatifs des textes messages internes
+    pour la classe RecyclerViewAdapter
+ */
 public final class RecyclerViewHolder extends RecyclerView.ViewHolder {
     TextView textMessage;
     ImageView imageColorText;

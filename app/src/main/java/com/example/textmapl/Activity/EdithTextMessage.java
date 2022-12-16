@@ -14,7 +14,10 @@ import android.widget.EditText;
 
 import com.example.textmapl.File.FileText;
 import com.example.textmapl.R;
-
+import com.example.textmapl.server.Communication;
+/*
+    Classe d'activité permettant de faire des modifications de textes messages
+ */
 public class EdithTextMessage extends AppCompatActivity {
     EditText textMessage;
     int id;
@@ -44,7 +47,7 @@ public class EdithTextMessage extends AppCompatActivity {
                         .setMessage("Message Modifié")
                         .show();
 
-                new CountDownTimer(1500, 1000) {
+                new CountDownTimer(2000, 1000) {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onTick(long millisUntilFinished) {
